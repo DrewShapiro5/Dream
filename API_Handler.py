@@ -30,27 +30,28 @@ class StableDiffusionAPI:
             try:
                 async with aiohttp.ClientSession() as session:
                     if self.current_request.init_image is None:
+                        print('bello')
                         url = f"{self.base_url}/sdapi/v1/txt2img"
                         payload = {
                             "prompt": self.current_request.prompt,
                             "seed": self.current_request.seed,
-                            "steps": self.current_request.steps,
+                            "steps": 25,
                             "width": self.current_request.width,
                             "height": self.current_request.height
                         }
                     else:
-                        if self.current_request.init_image is None:
-                            url = f"{self.base_url}/sdapi/v1/img2img"
-                            payload = {
-                                "init_images": [self.current_request.init_image],
-                                "prompt": self.current_request.prompt,
-                                "seed": self.current_request.seed,
-                                "steps": self.current_request.steps,
-                                "width": self.current_request.width,
-                                "height": self.current_request.height,
-                                "denoising_strength": 0.75,
-                                "cfg_scale": 7
-                            }
+                        print('Hello')
+                        url = f"{self.base_url}/sdapi/v1/img2img"
+                        payload = {
+                            "init_images": [self.current_request.init_image],
+                            "prompt": self.current_request.prompt,
+                            "seed": self.current_request.seed,
+                            "steps": self.current_request.steps,
+                            "width": self.current_request.width,
+                            "height": self.current_request.height,
+                            "denoising_strength": 0.4,
+                            "cfg_scale": 3,
+                        }
                     response = await session.post(url, json=payload)
                     result = await response.json()
                     if self.current_request.callback:
